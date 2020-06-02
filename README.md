@@ -12,7 +12,7 @@ Installation
 ===========
 On linux, just run:
 ```console
-adam@console~$ sudo curl -s -L https://github.com/Sharpz7/gopack/releases/download/0.1.0/install.sh | bash
+adam@console~$ sudo curl -s -L https://github.com/Sharpz7/gopack/releases/download/0.1.0/install.sh | sudo bash
 ```
 
 Maintainers and Developers
