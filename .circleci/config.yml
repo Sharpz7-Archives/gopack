@@ -6,7 +6,7 @@ variables:
 jobs:
   compile:
     docker:
-      - image: golang:1.12
+      - image: sharp6292/gopack:0.0.5a
 
     steps:
       - checkout
@@ -15,7 +15,7 @@ jobs:
           name: setup
           command: |
             mkdir releases
-            go get "gopkg.in/yaml.v2"
+            gopack --file install
 
       - run:
           name: compile
