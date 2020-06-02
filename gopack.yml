@@ -1,0 +1,5 @@
+goversion: "1.12"
+packages:
+- gopkg.in/yaml.v2
+devpackages:
+- github.com/joho/godotenv

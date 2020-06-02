@@ -1,0 +1,88 @@
+version: 2
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+jobs:
+  compile:
+    docker:
+      - image: golang:1.12
+
+    steps:
+      - checkout
+
+      - run:
+          name: setup
+          command: |
+            mkdir releases
+            go get "gopkg.in/yaml.v2"
+
+      - run:
+          name: compile
+          command: |
+            go build -o "gopack" ./src
+            tar -czf ../releases/linux.tar.gz "gopack"
+            cp -r ./installs/install.sh ../releases/install.sh
+            cd ..
+
+            mkdir ./workspace
+            cp ./gopack ./workspace/gopack
+            cp ./.version ./workspace/.version
+            cp -r ./releases ./workspace/releases
+          environment:
+            GOOS: "linux"
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./workspace
+
+  dockerhub:
+    docker:
+      - image: docker:stable
+
+    steps:
+      - setup_remote_docker
+
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: build
+          command : |
+            source ./.version
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker pull sharp6292/gopack:${VERSION} || true
+            docker build --cache-from sharp6292/gopack:${VERSION} -f ./.circleci/Dockerfile -t sharp6292/gopack:${VERSION} .
+            docker push  sharp6292/gopack:${VERSION}
+
+  release:
+    docker:
+      - image: sharp6292/ci-gitrelease
+
+    steps:
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: release
+          command : |
+            cd ./workspace
+            source ./.version
+            sed -i -e "s/XXXXX/${VERSION}/g" ./releases/install.sh
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./releases
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - compile
+
+      - release:
+          requires:
+            - compile
+          filters:
+            branches:
+              only: master
