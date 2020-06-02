@@ -14,7 +14,7 @@ On linux, just run:
 ```console
 adam@console~$ sudo curl -s -L https://github.com/Sharpz7/gopack/releases/download/0.0.5a/install.sh | bash
 ```
-```
+
 Replace `0.0.5a` with the version of your choice.
 
 
