@@ -6,7 +6,7 @@ variables:
 jobs:
   compile:
     docker:
-      - image: sharp6292/gopack:0.0.5a
+      - image: sharp6292/gopack:0.1.0
 
     steps:
       - checkout
