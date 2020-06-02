@@ -79,7 +79,7 @@ func checkVersions(goFile goPack) error {
 func removePackage(targetPkg string, pkgs []string) []string {
 
 	finalGoFile := make([]string, 0)
-	for _, pkg := range pkgs{
+	for _, pkg := range pkgs {
 		if pkg != targetPkg {
 			finalGoFile = append(finalGoFile, pkg)
 		}

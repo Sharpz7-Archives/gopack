@@ -4,13 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os/exec"
 
 	"gopkg.in/yaml.v2"
 )
 
 func genFile() {
+	out, _ := exec.Command("go", "version").Output()
+	outString := string(out[13:17])
+
 	testfile := goPack{
-		GoVersion: "1.12"}
+		GoVersion: outString}
 
 	err := saveFile(testfile)
 	clientErrCheck(err, "Failed to generate gopack.yml")
