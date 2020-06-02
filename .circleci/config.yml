@@ -84,11 +84,11 @@ workflows:
             - compile
           filters:
             branches:
-              only: ci-testing
+              only: master
 
       - release:
           requires:
             - compile
           filters:
             branches:
-              only: ci-testing
+              only: master
