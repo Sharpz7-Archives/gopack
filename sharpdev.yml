@@ -1,0 +1,20 @@
+version: 1
+envfile: .env
+scripts:
+  build: go build -o gopack ./src
+  list: git branch
+  revert: git revert ${SHARP_ARG_1}..HEAD
+  archive: |
+   git tag archive/$SHARP_ARG_1 $SHARP_ARG_1 &&
+   git branch -d $SHARP_ARG_1
+  test: |
+    go build -o gopack ./src &&
+
+    ./gopack -file uninstall &&
+    ./gopack install gopkg.in/yaml.v2 &&
+
+    sudo rm -r ${GOPATH}/src/gopkg.in/yaml.v2 &&
+    ./gopack -file install &&
+
+    ./gopack uninstall gopkg.in/yaml.v2 &&
+    ./gopack install gopkg.in/yaml.v2

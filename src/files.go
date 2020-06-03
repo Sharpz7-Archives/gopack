@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Creates a gopack.yml example file
 func genFile() {
 	out, _ := exec.Command("go", "version").Output()
 	outString := string(out[13:17])
@@ -17,11 +18,12 @@ func genFile() {
 		GoVersion: outString}
 
 	err := saveFile(testfile)
-	clientErrCheck(err, "Failed to generate gopack.yml")
+	check(err, "Failed to generate gopack.yml")
 
 	fmt.Println("Created gopack.yml")
 }
 
+// Loads a gopack.yml file
 func loadFile() (goPack, error) {
 	f, readErr := ioutil.ReadFile("./gopack.yml")
 	var goFile goPack
@@ -33,9 +35,10 @@ func loadFile() (goPack, error) {
 	return goFile, nil
 }
 
+// Saves gopack.yml
 func saveFile(goFile goPack) error {
 	yamlData, marshErr := yaml.Marshal(goFile)
-	clientErrCheck(marshErr, "Failed to Convert to Yaml")
+	check(marshErr, "Failed to Convert to Yaml")
 	writeErr := ioutil.WriteFile("./gopack.yml", yamlData, 0644)
 
 	if marshErr != nil || writeErr != nil {
