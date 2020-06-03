@@ -45,7 +45,7 @@ func main() {
 
     // Checks if an arg has been selected
 	if len(flag.Args()) == 0 {
-		log.Fatal("You can either chose to 'uninstall' or 'install'!")
+		flag.Usage()
 	} else {
 		var act = flag.Args()[0]
 
