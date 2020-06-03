@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Sharpz7/gopack.svg?style=svg)](https://circleci.com/gh/Sharpz7/gopack)
+
 GOPACK | Simple GOlang Package Manager
 ===========
 GoPack aims to take some of the features of tools like `pipenv` to golang.
