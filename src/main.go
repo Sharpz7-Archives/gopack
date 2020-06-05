@@ -79,7 +79,7 @@ func main() {
 
 func check(e error, msg string) {
     // Try and get SHARPDEV var
-	err := godotenv.Load()
+	godotenv.Load()
 
 	if e != nil {
 		if os.Getenv("SHARPDEV") == "TRUE" {
