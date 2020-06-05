@@ -1,70 +1,20 @@
-version: 2
+version: 2.1
 
-variables:
-  DOCKER_DRIVER: overlay2
+orbs:
+  release: sharptools/release@0.0.3
+  go: sharptools/go@0.0.3
 
-jobs:
-  compile:
-    docker:
-      - image: cimg/go:1.12
-
-    steps:
-      - checkout
-
-      - run:
-          name: compile
-          command: |
-            mkdir releases
-            curl -s -L https://github.com/Sharpz7/gopack/releases/download/0.1.2/install.sh | bash
-            gopack --file install
-
-            go build -o "gopack" ./src
-
-          environment:
-            GOOS: "linux"
-
-      - run:
-          name: tar
-          command: |
-            tar -czf ./releases/linux.tar.gz "gopack"
-            cp -r ./installs/install.sh ./releases/install.sh
-
-            mkdir ./workspace
-            cp ./gopack ./workspace/gopack
-            cp ./.version ./workspace/.version
-            cp -r ./releases ./workspace/releases
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./workspace
-
-  release:
-    docker:
-      - image: sharp6292/ci-gitrelease
-
-    steps:
-      - attach_workspace:
-          at: .
-
-      - run:
-          name: release
-          command : |
-            cd ./workspace
-            source ./.version
-            sed -i -e "s/XXXXX/${VERSION}/g" ./releases/install.sh
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./releases
 
 workflows:
-  version: 2
   workflow:
     jobs:
-      - compile
+      - go/package:
+          appname: gopack
 
-      - release:
+      - release/github_job:
           context: General
           requires:
-            - compile
+            - go/package
           filters:
             branches:
               only: master
