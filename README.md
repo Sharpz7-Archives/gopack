@@ -25,7 +25,6 @@ On linux, just run:
 ```console
 ╭─adam@box ~/
 ╰─➤  sudo curl -s -L https://github.com/Sharpz7/gopack/releases/download/0.1.2/install.sh | sudo bash
-adam@console~$
 ```
 
 ## Command Options
