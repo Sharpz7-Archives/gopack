@@ -3,10 +3,10 @@ envfile: .env
 scripts:
   build: go build -o ./internal/gopack ./src
   list: git branch
-  revert: git revert ${SHARP_ARG_1}..HEAD
+  revert: git revert $_ARG1..HEAD
   archive: |
-   git tag archive/$SHARP_ARG_1 $SHARP_ARG_1 &&
-   git branch -d $SHARP_ARG_1
+   git tag archive/$_ARG1 $_ARG1 &&
+   git branch -d $_ARG1
   test: |
     go build -o ./internal/gopack ./src &&
 
