@@ -29,7 +29,7 @@ func loadFile() (goPack, error) {
 	var goFile goPack
 	marshErr := yaml.Unmarshal(f, &goFile)
 	if marshErr != nil || readErr != nil {
-		return goPack{}, errors.New("failed to load file")
+		return goPack{}, errors.New("Failed to load file")
 	}
 
 	return goFile, nil
@@ -42,7 +42,7 @@ func saveFile(goFile goPack) error {
 	writeErr := ioutil.WriteFile("./gopack.yml", yamlData, 0644)
 
 	if marshErr != nil || writeErr != nil {
-		return errors.New("failed to save file")
+		return errors.New("Failed to save file")
 	}
 
 	return nil

@@ -24,13 +24,13 @@ func init() {
 	flag.BoolVar(&fileFlag, "file", false, "Install from File")
 	flag.BoolVar(&devFlag, "dev", false, "Install Developer Packages")
 
-    // Creates Helper Function
+	// Creates Helper Function
 	flag.Usage = func() {
 		fmt.Println(`
 Args of Gopack:
 
-    - install
-    - uninstall
+    - install {package}
+    - uninstall {package}
 
 You can also manually edit the gopack.yml file and use the file flag
 		`)
@@ -43,7 +43,7 @@ func main() {
 	// Parses flags and removes them from args
 	flag.Parse()
 
-    // Checks if an arg has been selected
+	// Checks if an arg has been selected
 	if len(flag.Args()) == 0 {
 		flag.Usage()
 	} else {
@@ -66,7 +66,7 @@ func main() {
 			log.Fatal("You can either chose to 'uninstall' or 'install'!")
 		}
 
-        // If file flag is on apply file action
+		// If file flag is on apply file action
 		if fileFlag {
 			actionFile(goFile, act)
 		} else {
@@ -78,7 +78,7 @@ func main() {
 }
 
 func check(e error, msg string) {
-    // Try and get SHARPDEV var
+	// Try and get SHARPDEV var
 	godotenv.Load()
 
 	if e != nil {
@@ -95,7 +95,7 @@ func checkVersions(goFile goPack) error {
 	outString := string(out[13:17])
 
 	if outString != goFile.GoVersion {
-		return errors.New("versions do not match")
+		return errors.New("Versions do not match")
 	}
 
 	return nil
@@ -113,7 +113,6 @@ func removePackage(targetPkg string, pkgs []string) []string {
 
 	return finalGoFile
 }
-
 
 // Execute a command to do with pkg install or uninstall
 func pkgCommand(name string, arg ...string) {

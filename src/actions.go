@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func actionFile(goFile goPack, option string) {
@@ -26,17 +27,7 @@ func actionFile(goFile goPack, option string) {
 		}
 	}
 
-	if option == actionUninstall {
-		// If Uninstalling remove from gopack.yml
-		goFile.Packages = make([]string, 0)
-		if devFlag {
-			goFile.DevPackages = make([]string, 0)
-		}
-		err := saveFile(goFile)
-		check(err, "Failed to remove all packages from gopack.yml")
-	}
-
-	fmt.Println(option+"ed", "all Packages from File")
+	fmt.Println(strings.Title(option)+"ed", "all Packages from File")
 }
 
 func action(goFile goPack, option string) {
@@ -48,9 +39,19 @@ func action(goFile goPack, option string) {
 
 		// If dev enabled add to dev packages
 		if devFlag {
-			goFile.DevPackages = append(goFile.DevPackages, pkg)
+			if !stringInSlice(pkg, goFile.DevPackages) {
+				goFile.DevPackages = append(goFile.DevPackages, pkg)
+			} else {
+				fmt.Println("Already Installed " + pkg)
+			}
+
 		} else {
-			goFile.Packages = append(goFile.Packages, pkg)
+			if !stringInSlice(pkg, goFile.Packages) {
+				goFile.Packages = append(goFile.Packages, pkg)
+			} else {
+				fmt.Println("Already Installed " + pkg)
+			}
+
 		}
 
 	} else {
@@ -69,5 +70,14 @@ func action(goFile goPack, option string) {
 	err := saveFile(goFile)
 	check(err, "Failed to remove package to gopack.yml")
 
-	fmt.Println(option+"ed", "Package")
+	fmt.Println(strings.Title(option)+"ed", "Package", pkg)
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
